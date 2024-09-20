@@ -1,0 +1,77 @@
+Revision history for Image-DecodeQR-WeChat
+
+0.01	2022-03-09/19:00
+	First version, released on an unsuspecting world.
+	Tests include checking for multiple QR codes in same image,
+	and supports utf8 filenames and utf8 payloads.
+	Note that for some images OpenCV's code crashes.
+	Small QR codes or fuzzy ones. Avoid them.
+	QR codes less than 55x55 px may have problems.
+	Thank you OpenCV and WeChat.
+
+0.2	2022-03-11/17:50
+	Fixed pod in WeChat.pm
+
+0.3	2022-03-11/18:30
+	Added more tests for rotated QR codes.
+	Fixes and additions to the documentation.
+
+0.4	2022-03-14/19:02
+	Made the OpenCV detection more robust to hopefully
+	deal with systems without pkg-config.
+	The added method is cmake-based which is OpenCV's
+	preferred method of detecting compilation parameters.
+	Hopefully OpenCV binaries installed on M$-windows
+	will also include a cmake executable. If neither cmake
+	nor pkg-config are present, then we fallback on ENV vars
+	specified by user during 'perl Makefile.PL'.
+	Added checks for whether OpenCV installation supports
+	graphical output (highgui, imshow()) and supports showing
+	the results in a window. This will hopefully
+	avoid compilation errors because imshow() is undefined.
+	Added checks for neutralising the 'graphicaldisplayresult'
+	option if highgui is not supported. These are C functions.
+
+0.5	2022-03-15/01:40
+	Added some more module dependencies to Makefile.PL.
+	Fixed some errors in script/image-decodeqr-wechat.pl.
+
+0.6	2022-03-15/19:30
+	Bummer! Sorry CPAN.
+
+0.7	2022-03-15/19:31
+	Fixed a problem with wechat_qr_decode_lib.cpp it should
+	included the highgui.hpp only if HAS_HIGHGUI==1
+
+0.8	2022-03-16/19:30
+	Fixed a problem with using cmake to detect OpenCV.
+
+0.9	2022-03-17/20:00
+	A problem arose when calling decode_xs() with an array
+	of 6 scalars rather than 6 scalars. Both should work AFAIC.
+	Having PROTOTYPES: ENABLE in xs code caught this and complained.
+	I have fixed it with specifying explicitly the prototype using
+	PROTOTYPE: @ (without this, xsubp produces a '$$$$$$' prototype).
+	Added a test case to test this.
+
+1.0	2024-03-07/14:14
+	Added 'META_MERGE' key in Makefile.PL
+        Modified clean target in Makefile.PL to clean auto-generated .bs and .o files.
+        Added dependency 'Test2::Plugin::UTF8' for testing without 'Wide character in print ...' messages
+        Test t/20-decode_xs-without-use-utf8.t was judged pointless and was removed -- its job is done by t/10-decode_xs.t.
+        Documentation enchancments.
+
+2.0     2024-03-08/23:00
+        Major change: replaced sub names 'decode' with 'detect_and_decode_qr' : reason was that decode() clashes with Encode::decode().
+        Major change: replaced sub names 'decode_xs' with 'detect_and_decode_qr_xs'.
+        Major change: output files are now in XML and JPEG formats.
+        Added more tests.
+        Enhnaced the highgui detection procedure with 2 more methods.
+        Replaced CPAN Ratings link in POD with a link to PerlMonks' Module Review in order to settle issue https://rt.cpan.org/Public/Bug/Display.html?id=147894
+        Documentation enchancments.
+
+2.1     2024-03-12/11:50
+        Documentation fixes.
+
+2.2     2024-09-20/23:00
+        Made test filenames more descriptive and fixed some test file messages.
